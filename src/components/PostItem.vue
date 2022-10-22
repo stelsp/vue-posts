@@ -8,7 +8,7 @@
         {{ post.body }}
       </p>
     </li>
-    <ButtonDelete />
+    <ButtonDelete @click="$emit('delete', post)" />
   </div>
 </template>
 <script>

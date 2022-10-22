@@ -3,7 +3,12 @@
     <h3 class="title">Posts</h3>
   </div>
   <ul class="posts offset">
-    <PostItem v-for="post in posts" :key="post.id" :post="post" />
+    <PostItem
+      v-for="post in posts"
+      :key="post.id"
+      :post="post"
+      @delete="$emit('delete', post)"
+    />
   </ul>
 </template>
 <script>

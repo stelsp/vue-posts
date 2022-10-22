@@ -14,6 +14,7 @@ export default {
 </script>
 <style scoped>
 .button {
+  box-shadow: 0 0.25em 1em rgb(0 0 0 / 35%);
   cursor: pointer;
 }
 .button:hover,
@@ -23,5 +24,11 @@ export default {
 path {
   stroke: var(--clr-primary-300);
   fill: var(--clr-secondary-300);
+}
+
+path:hover,
+path:focus-visible {
+  stroke: var(--clr-primary-300);
+  fill: var(--clr-primary-300);
 }
 </style>

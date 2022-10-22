@@ -2,7 +2,7 @@
   <main class="app">
     <section aria-label="main" class="container">
       <PostForm @create="createPost" />
-      <PostList :posts="posts" />
+      <PostList :posts="posts" @delete="deletePost" />
     </section>
   </main>
 </template>
@@ -30,6 +30,9 @@ export default {
     createPost(post) {
       this.posts = [post, ...this.posts];
     },
+    deletePost(post) {
+      this.posts = this.posts.filter((p) => p.id !== post.id);
+    },
   },
 };
 </script>
@@ -37,19 +40,68 @@ export default {
 <style>
 /* RESET */
 *,
-:after,
-:before {
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
-  list-style-type: none;
+  font: inherit;
+  color: inherit;
+  background: inherit;
   outline: none;
   border: none;
-  background: inherit;
-  color: inherit;
-  font: inherit;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+html {
   scroll-behavior: smooth;
+}
+
+html:focus-within {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
   text-rendering: optimizeSpeed;
+}
+
+a {
+  text-decoration: inherit;
+}
+
+img,
+picture,
+svg {
+  display: block;
+}
+
+@media screen and (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html:focus-within {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 :root {
