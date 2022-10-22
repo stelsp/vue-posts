@@ -16,10 +16,9 @@ export default {
 </script>
 <style scoped>
 .input {
-  padding: 0.2em 0.5em;
+  padding-block: 0.2em;
   width: 100%;
-  box-shadow: 0 0.25em 1em rgb(0 0 0 / 35%);
-  border-radius: 0.5rem;
+  border-bottom: 1px solid var(--clr-accent-400);
   background-color: var(--clr-secondary-300);
 }
 </style>

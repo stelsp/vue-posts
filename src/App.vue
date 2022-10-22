@@ -1,8 +1,13 @@
 <template>
   <main class="app">
-    <section aria-label="main" class="container">
-      <PostForm @create="createPost" />
+    <section aria-label="main" class="container offset">
+      <ButtonPrimary @click="showDialog" type="button">
+        Create Post
+      </ButtonPrimary>
       <PostList :posts="posts" @delete="deletePost" />
+      <DialogPrimary v-model:show="dialogVisible">
+        <PostForm @create="createPost" />
+      </DialogPrimary>
     </section>
   </main>
 </template>
@@ -24,22 +29,26 @@ export default {
         { id: 3, title: "Title 3", body: "Description 3" },
         { id: 4, title: "Title 4", body: "Description 4" },
       ],
+      dialogVisible: false,
     };
   },
   methods: {
     createPost(post) {
       this.posts = [post, ...this.posts];
+      this.dialogVisible = false;
     },
     deletePost(post) {
       this.posts = this.posts.filter((p) => p.id !== post.id);
+    },
+    showDialog() {
+      this.dialogVisible = true;
     },
   },
 };
 </script>
 
 <style>
-/* RESET */
-*,
+RESET *,
 *::before,
 *::after {
   box-sizing: border-box;
@@ -156,6 +165,7 @@ svg {
 
 /* APP */
 body {
+  min-width: 320px;
   color: var(--clr-primary);
   background-color: var(--clr-secondary-400);
   font-size: var(--fs-400);

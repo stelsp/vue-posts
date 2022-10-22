@@ -1,15 +1,15 @@
 <template>
-  <div class="post">
-    <li>
-      <h5 class="title">
+  <li class="post">
+    <div>
+      <h4 class="title">
         {{ post.title }}
-      </h5>
+      </h4>
       <p class="description">
         {{ post.body }}
       </p>
-    </li>
+    </div>
     <ButtonDelete @click="$emit('delete', post)" />
-  </div>
+  </li>
 </template>
 <script>
 export default {

@@ -1,9 +1,9 @@
 <template>
-  <form @submit.prevent class="form offset">
+  <form @submit.prevent class="form">
     <h3 class="title">Create Post</h3>
     <InputPrimary v-model="post.title" type="text" placeholder="Title" />
     <InputPrimary v-model="post.body" type="text" placeholder="Description" />
-    <ButtonPrimary @click="createPost">Submit</ButtonPrimary>
+    <ButtonPrimary @click="createPost" type="submit">Submit</ButtonPrimary>
   </form>
 </template>
 <script>
