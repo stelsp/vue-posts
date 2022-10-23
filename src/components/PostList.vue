@@ -30,13 +30,12 @@ export default {
 .wrapper {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 2rem;
 }
 .posts {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  overflow: hidden;
+  gap: 1.5rem;
 }
 
 .title {
@@ -51,7 +50,7 @@ export default {
 .posts-enter-from,
 .posts-leave-to {
   opacity: 0;
-  transform: translateX(130px);
+  transform: translateY(30px);
 }
 .posts-move {
   transition: transform 0.8s ease;

@@ -8,7 +8,7 @@ export default {
 </script>
 <style scoped>
 .button {
-  padding: 0.2em 1.3em;
+  padding: 0.5em 1.3em;
   box-shadow: 0 0.25em 1em rgb(0 0 0 / 35%);
   border-radius: 0.5rem;
   font-weight: var(--fw-700);

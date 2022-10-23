@@ -4,6 +4,7 @@ import InputPrimary from "@/components/UI/InputPrimary";
 import DialogPrimary from "@/components/UI/DialogPrimary";
 import LoadingPrimary from "@/components/UI/LoadingPrimary";
 import SelectPrimary from "@/components/UI/SelectPrimary";
+import InputSecondary from "@/components/UI/InputSecondary";
 
 export default [
   ButtonPrimary,
@@ -12,4 +13,5 @@ export default [
   DialogPrimary,
   LoadingPrimary,
   SelectPrimary,
+  InputSecondary,
 ];

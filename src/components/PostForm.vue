@@ -33,7 +33,8 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 0.5rem;
+  gap: 1rem;
+  font-size: var(--fs-600);
 }
 
 .title {
@@ -42,6 +43,6 @@ export default {
 }
 
 .button {
-  margin-top: 1rem;
+  margin-top: 1.5rem;
 }
 </style>

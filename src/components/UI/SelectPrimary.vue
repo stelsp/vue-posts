@@ -28,12 +28,16 @@ export default {
 </script>
 <style scoped>
 .select {
-  padding: 0.2em 1em;
+  padding: 0.5em 1.3em;
   background-color: var(--clr-secondary-300);
   border-radius: 0.5rem;
   box-shadow: 0 0.25em 1em rgb(0 0 0 / 35%);
   font-weight: var(--fw-700);
   color: var(--clr-accent-400);
   cursor: pointer;
+}
+
+option:focus {
+  background: red;
 }
 </style>

@@ -3,6 +3,11 @@
     <section aria-label="section-posts" class="container">
       <header aria-label="section-posts-header" class="section-header offset">
         <h1 class="title">Posts App</h1>
+        <InputSecondary
+          v-model="searchQuery"
+          type="text"
+          placeholder="Search"
+        />
         <div>
           <SelectPrimary v-model="selectedSort" :options="sortOptions" />
           <ButtonPrimary @click="showDialog" type="button">
@@ -11,7 +16,7 @@
         </div>
       </header>
       <PostList
-        :posts="sortedPosts"
+        :posts="sortedAndSearchedPosts"
         v-if="!isPostsLoading"
         @delete="deletePost"
       />
@@ -43,6 +48,7 @@ export default {
         { value: "title", name: "Title" },
         { value: "body", name: "Description" },
       ],
+      searchQuery: "",
     };
   },
   methods: {
@@ -77,6 +83,11 @@ export default {
     sortedPosts() {
       return [...this.posts].sort((post1, post2) =>
         post1[this.selectedSort]?.localeCompare(post2[this.selectedSort])
+      );
+    },
+    sortedAndSearchedPosts() {
+      return this.sortedPosts.filter((post) =>
+        post.title.toLowerCase().includes(this.searchQuery.toLowerCase())
       );
     },
   },
@@ -197,7 +208,7 @@ svg {
 }
 
 .offset {
-  padding-block: 1rem;
+  padding-block: 2rem;
 }
 
 /* APP */
@@ -213,7 +224,7 @@ body {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 1rem;
+  gap: 2rem;
 }
 .section-header div {
   width: 100%;
