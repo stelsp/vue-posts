@@ -27,6 +27,9 @@ export default {
 }
 
 .content {
+  --max-width: 600px;
+  --padding: 1rem;
+  width: min(var(--max-width), 100% - (var(--padding) * 2));
   margin-top: 10vh;
   border-radius: 0.5rem;
   padding: 1rem;

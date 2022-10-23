@@ -1,10 +1,12 @@
 <template>
   <main class="app">
-    <section aria-label="main" class="container offset">
+    <section aria-label="section-posts" class="container">
+      <h1 class="title offset">Posts App</h1>
       <ButtonPrimary @click="showDialog" type="button">
         Create Post
       </ButtonPrimary>
-      <PostList :posts="posts" @delete="deletePost" />
+      <PostList v-if="!isPostsLoading" :posts="posts" @delete="deletePost" />
+      <p v-else class="title offset">Loading...</p>
       <DialogPrimary v-model:show="dialogVisible">
         <PostForm @create="createPost" />
       </DialogPrimary>
@@ -15,6 +17,7 @@
 <script>
 import PostForm from "@/components/PostForm.vue";
 import PostList from "@/components/PostList.vue";
+import axios from "axios";
 
 export default {
   components: {
@@ -23,13 +26,10 @@ export default {
   },
   data() {
     return {
-      posts: [
-        { id: 1, title: "Title 1", body: "Description 1" },
-        { id: 2, title: "Title 2", body: "Description 2" },
-        { id: 3, title: "Title 3", body: "Description 3" },
-        { id: 4, title: "Title 4", body: "Description 4" },
-      ],
+      posts: [],
       dialogVisible: false,
+      modificatorValue: "",
+      isPostsLoading: false,
     };
   },
   methods: {
@@ -43,12 +43,29 @@ export default {
     showDialog() {
       this.dialogVisible = true;
     },
+    async fetchPosts() {
+      try {
+        this.isPostsLoading = true;
+        const response = await axios.get(
+          "https://jsonplaceholder.typicode.com/posts?_limit=10"
+        );
+        this.posts = response.data;
+      } catch (e) {
+        alert("Ошибка");
+      } finally {
+        this.isPostsLoading = false;
+      }
+    },
+  },
+  mounted() {
+    this.fetchPosts();
   },
 };
 </script>
 
 <style>
-RESET *,
+/* RESET  */
+*,
 *::before,
 *::after {
   box-sizing: border-box;
@@ -174,5 +191,10 @@ body {
 
 .app {
   color: var(--clr-primary-300);
+}
+
+.title {
+  font-size: var(--fs-700);
+  font-weight: var(--fw-700);
 }
 </style>
