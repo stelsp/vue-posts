@@ -37,7 +37,7 @@ export default {
 
 .title {
   max-width: 90%;
-  padding-bottom: 1rem;
+  padding-bottom: 0.75rem;
   border-bottom: 2px solid var(--clr-accent-400);
   font-size: var(--fs-600);
 }
