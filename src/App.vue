@@ -1,7 +1,10 @@
 <template>
   <main class="app">
-    <section aria-label="section-posts" class="container">
-      <header aria-label="section-posts-header" class="section-header offset">
+    <section aria-label="section-form">
+      <header
+        aria-label="section-form-header"
+        class="container section-header offset"
+      >
         <h1 class="title">Posts App</h1>
         <InputSecondary
           v-model="searchQuery"
@@ -15,15 +18,29 @@
           </ButtonPrimary>
         </div>
       </header>
-      <PostList
-        :posts="sortedAndSearchedPosts"
-        v-if="!isPostsLoading"
-        @delete="deletePost"
-      />
-      <LoadingPrimary v-if="isPostsLoading" class="title offset" />
       <DialogPrimary v-model:show="dialogVisible">
         <PostForm @create="createPost" />
       </DialogPrimary>
+    </section>
+    <section aria-label="section-posts">
+      <PostList
+        v-if="!isPostsLoading"
+        :posts="sortedAndSearchedPosts"
+        @delete="deletePost"
+        class="container"
+      />
+      <LoadingPrimary v-if="isPostsLoading" class="title container offset" />
+      <ul class="pagination__wrapper container offset">
+        <li
+          v-for="pagination in totalPages"
+          :key="pagination"
+          @click="changePage(pagination)"
+          class="pagination"
+          :class="{ pagination__current: page === pagination }"
+        >
+          {{ pagination }}
+        </li>
+      </ul>
     </section>
   </main>
 </template>
@@ -43,12 +60,15 @@ export default {
       posts: [],
       dialogVisible: false,
       isPostsLoading: false,
+      searchQuery: "",
       selectedSort: "",
       sortOptions: [
         { value: "title", name: "Title" },
         { value: "body", name: "Description" },
       ],
-      searchQuery: "",
+      page: 1,
+      limit: 10,
+      totalPages: 0,
     };
   },
   methods: {
@@ -62,11 +82,23 @@ export default {
     showDialog() {
       this.dialogVisible = true;
     },
+    changePage(pageNumber) {
+      this.page = pageNumber;
+    },
     async fetchPosts() {
       try {
         this.isPostsLoading = true;
         const response = await axios.get(
-          "https://jsonplaceholder.typicode.com/posts?_limit=10"
+          "https://jsonplaceholder.typicode.com/posts",
+          {
+            params: {
+              _page: this.page,
+              _limit: this.limit,
+            },
+          }
+        );
+        this.totalPages = Math.ceil(
+          response.headers["x-total-count"] / this.limit
         );
         this.posts = response.data;
       } catch (e) {
@@ -91,6 +123,11 @@ export default {
       );
     },
   },
+  watch: {
+    page() {
+      this.fetchPosts();
+    },
+  },
 };
 </script>
 
@@ -101,7 +138,6 @@ export default {
 *::after {
   box-sizing: border-box;
 }
-
 * {
   margin: 0;
   padding: 0;
@@ -111,41 +147,33 @@ export default {
   outline: none;
   border: none;
 }
-
 ul,
 ol {
   list-style: none;
 }
-
 html {
   scroll-behavior: smooth;
 }
-
 html:focus-within {
   scroll-behavior: smooth;
 }
-
 body {
   min-height: 100vh;
   text-rendering: optimizeSpeed;
 }
-
 a {
   text-decoration: inherit;
 }
-
 img,
 picture,
 svg {
   display: block;
 }
-
 @media screen and (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
 }
-
 @media (prefers-reduced-motion: reduce) {
   html:focus-within {
     scroll-behavior: auto;
@@ -160,7 +188,6 @@ svg {
     scroll-behavior: auto !important;
   }
 }
-
 :root {
   --clr-primary: #fff;
   --clr-primary-300: rgba(255, 255, 255, 0.8);
@@ -198,7 +225,6 @@ svg {
     var(--clr-secondary-400)
   );
 }
-
 /* UTILITY */
 .container {
   --max-width: 1200px;
@@ -210,7 +236,6 @@ svg {
 .offset {
   padding-block: 2rem;
 }
-
 /* APP */
 body {
   min-width: 320px;
@@ -218,6 +243,10 @@ body {
   background-color: var(--clr-secondary-400);
   font-size: var(--fs-400);
   font-family: monospace, sans-serif;
+}
+
+.app {
+  color: var(--clr-primary-300);
 }
 
 .section-header {
@@ -235,12 +264,35 @@ body {
   gap: 1rem;
 }
 
-.app {
-  color: var(--clr-primary-300);
-}
-
 .title {
   font-size: var(--fs-700);
   font-weight: var(--fw-700);
+}
+
+/* POST PAGINATION */
+.pagination__wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-inline: auto;
+}
+
+.pagination {
+  cursor: pointer;
+}
+
+.pagination:hover,
+.pagination:focus-visible {
+  scale: 1.2;
+  color: var(--clr-accent-400);
+}
+
+.pagination:active {
+  scale: 1.3;
+}
+
+.pagination__current {
+  color: var(--clr-accent-400);
 }
 </style>
