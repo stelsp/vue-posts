@@ -30,30 +30,29 @@
         class="container"
       />
       <LoadingPrimary v-if="isPostsLoading" class="title container offset" />
-      <ul class="pagination__wrapper container offset">
-        <li
-          v-for="pagination in totalPages"
-          :key="pagination"
-          @click="changePage(pagination)"
-          class="pagination"
-          :class="{ pagination__current: page === pagination }"
-        >
-          {{ pagination }}
-        </li>
-      </ul>
+      <PostsPagination
+        v-if="!scroll"
+        :totalPages="totalPages"
+        :page="page"
+        :scroll="scroll"
+        @change="changePage"
+        @toggle="toggleScroll"
+      />
     </section>
   </main>
 </template>
 
 <script>
+import axios from "axios";
 import PostForm from "@/components/PostForm.vue";
 import PostList from "@/components/PostList.vue";
-import axios from "axios";
+import PostsPagination from "@/components/PostsPagination.vue";
 
 export default {
   components: {
     PostForm,
     PostList,
+    PostsPagination,
   },
   data() {
     return {
@@ -69,6 +68,7 @@ export default {
       page: 1,
       limit: 10,
       totalPages: 0,
+      scroll: false,
     };
   },
   methods: {
@@ -84,6 +84,9 @@ export default {
     },
     changePage(pageNumber) {
       this.page = pageNumber;
+    },
+    toggleScroll() {
+      this.scroll = !this.scroll;
     },
     async fetchPosts() {
       try {
@@ -101,6 +104,28 @@ export default {
           response.headers["x-total-count"] / this.limit
         );
         this.posts = response.data;
+      } catch (e) {
+        alert("Ошибка");
+      } finally {
+        this.isPostsLoading = false;
+      }
+    },
+    async fetchMorePosts() {
+      try {
+        this.isPostsLoading = true;
+        const response = await axios.get(
+          "https://jsonplaceholder.typicode.com/posts",
+          {
+            params: {
+              _page: this.page,
+              _limit: this.limit,
+            },
+          }
+        );
+        this.totalPages = Math.ceil(
+          response.headers["x-total-count"] / this.limit
+        );
+        this.posts = [...this.posts, ...response.data];
       } catch (e) {
         alert("Ошибка");
       } finally {
@@ -267,32 +292,5 @@ body {
 .title {
   font-size: var(--fs-700);
   font-weight: var(--fw-700);
-}
-
-/* POST PAGINATION */
-.pagination__wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  margin-inline: auto;
-}
-
-.pagination {
-  cursor: pointer;
-}
-
-.pagination:hover,
-.pagination:focus-visible {
-  scale: 1.2;
-  color: var(--clr-accent-400);
-}
-
-.pagination:active {
-  scale: 1.3;
-}
-
-.pagination__current {
-  color: var(--clr-accent-400);
 }
 </style>
