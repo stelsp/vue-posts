@@ -1,11 +1,7 @@
 <!-- eslint-disable vue/no-mutating-props -->
 <template>
-  <select
-    v-model="modelValue"
-    @change="$emit('update:modelValue', e.target.value)"
-    class="select"
-  >
-    <option disabled value="">Choose from list</option>
+  <select v-model="modelValue" @change="changeOption" class="select">
+    <option disabled selected value="">Choose from list</option>
     <option v-for="option in options" :key="option.value" :value="option.value">
       {{ option.name }}
     </option>
@@ -21,6 +17,11 @@ export default {
     options: {
       type: Array,
       default: () => [],
+    },
+  },
+  methods: {
+    changeOption(event) {
+      this.$emit("update:modelValue", event.target.value);
     },
   },
 };

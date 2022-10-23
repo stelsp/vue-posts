@@ -10,7 +10,11 @@
           </ButtonPrimary>
         </div>
       </header>
-      <PostList :posts="posts" v-if="!isPostsLoading" @delete="deletePost" />
+      <PostList
+        :posts="sortedPosts"
+        v-if="!isPostsLoading"
+        @delete="deletePost"
+      />
       <LoadingPrimary v-if="isPostsLoading" class="title offset" />
       <DialogPrimary v-model:show="dialogVisible">
         <PostForm @create="createPost" />
@@ -31,13 +35,13 @@ export default {
   },
   data() {
     return {
-      posts: () => [],
+      posts: [],
       dialogVisible: false,
       isPostsLoading: false,
       selectedSort: "",
       sortOptions: [
         { value: "title", name: "Title" },
-        { value: "body", name: "Body" },
+        { value: "body", name: "Description" },
       ],
     };
   },
@@ -68,6 +72,13 @@ export default {
   },
   mounted() {
     this.fetchPosts();
+  },
+  computed: {
+    sortedPosts() {
+      return [...this.posts].sort((post1, post2) =>
+        post1[this.selectedSort]?.localeCompare(post2[this.selectedSort])
+      );
+    },
   },
 };
 </script>
