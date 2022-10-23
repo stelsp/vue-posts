@@ -1,12 +1,17 @@
 <template>
   <main class="app">
     <section aria-label="section-posts" class="container">
-      <h1 class="title offset">Posts App</h1>
-      <ButtonPrimary @click="showDialog" type="button">
-        Create Post
-      </ButtonPrimary>
-      <PostList v-if="!isPostsLoading" :posts="posts" @delete="deletePost" />
-      <p v-else class="title offset">Loading...</p>
+      <header aria-label="section-posts-header" class="section-header offset">
+        <h1 class="title">Posts App</h1>
+        <div>
+          <SelectPrimary v-model="selectedSort" :options="sortOptions" />
+          <ButtonPrimary @click="showDialog" type="button">
+            Create Post
+          </ButtonPrimary>
+        </div>
+      </header>
+      <PostList :posts="posts" v-if="!isPostsLoading" @delete="deletePost" />
+      <LoadingPrimary v-if="isPostsLoading" class="title offset" />
       <DialogPrimary v-model:show="dialogVisible">
         <PostForm @create="createPost" />
       </DialogPrimary>
@@ -26,10 +31,14 @@ export default {
   },
   data() {
     return {
-      posts: [],
+      posts: () => [],
       dialogVisible: false,
-      modificatorValue: "",
       isPostsLoading: false,
+      selectedSort: "",
+      sortOptions: [
+        { value: "title", name: "Title" },
+        { value: "body", name: "Body" },
+      ],
     };
   },
   methods: {
@@ -187,6 +196,21 @@ body {
   background-color: var(--clr-secondary-400);
   font-size: var(--fs-400);
   font-family: monospace, sans-serif;
+}
+
+.section-header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+}
+.section-header div {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 
 .app {
