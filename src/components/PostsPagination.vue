@@ -1,6 +1,6 @@
 <template>
   <div class="container offset wrapper">
-    <ul class="pagination__wrapper">
+    <!-- <ul class="pagination__wrapper">
       <li
         v-for="pagination in totalPages"
         :key="pagination"
@@ -13,7 +13,7 @@
     </ul>
     <ButtonPrimary @click="$emit('toggle', scroll)" type="button">
       Load All Post's
-    </ButtonPrimary>
+    </ButtonPrimary> -->
   </div>
 </template>
 <script>
