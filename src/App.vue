@@ -29,6 +29,7 @@
         @delete="deletePost"
         class="container"
       />
+      <div ref="observer" class="observer" />
       <LoadingPrimary v-if="isPostsLoading" class="title container offset" />
       <PostsPagination
         v-if="!scroll"
@@ -112,7 +113,7 @@ export default {
     },
     async fetchMorePosts() {
       try {
-        this.isPostsLoading = true;
+        this.page += 1;
         const response = await axios.get(
           "https://jsonplaceholder.typicode.com/posts",
           {
@@ -128,13 +129,25 @@ export default {
         this.posts = [...this.posts, ...response.data];
       } catch (e) {
         alert("Ошибка");
-      } finally {
-        this.isPostsLoading = false;
       }
     },
   },
   mounted() {
     this.fetchPosts();
+
+    const options = {
+      rootMargin: "0px",
+      threshold: 1.0,
+    };
+
+    const callback = (entries) => {
+      if (entries[0].isIntersecting) {
+        this.fetchMorePosts();
+      }
+    };
+
+    const observer = new IntersectionObserver(callback, options);
+    observer.observe(this.$refs.observer);
   },
   computed: {
     sortedPosts() {
@@ -149,9 +162,11 @@ export default {
     },
   },
   watch: {
-    page() {
-      this.fetchPosts();
-    },
+    // page() {
+    //   if (!this.scroll) {
+    //     this.fetchPosts();
+    //   }
+    // },
   },
 };
 </script>
